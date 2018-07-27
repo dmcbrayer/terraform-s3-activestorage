@@ -3,12 +3,12 @@ variable "aws_profile" {
   default = "roundtable"
 }
 
-/*
-  variable "bucket_name" {
-    description = "What you want your bucket to be called"
-  }
-*/
+
+variable "bucket_name" {
+  description = "What do you want your bucket to be called?"
+}
+
 
 variable "iam_user_name" {
-  description = "What you want your IAM user role to be called"
+  description = "What do you want your IAM user to be called?"
 }

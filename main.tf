@@ -29,14 +29,34 @@ resource "aws_iam_user_policy" "s3-policy" {
 EOF
 }
 
-output "user_name" {
-  value = "${aws_iam_user.s3-user.name}"
+resource "aws_s3_bucket" "s3-bucket" {
+  bucket = "${var.bucket_name}"
 }
 
-output "key_id" {
-  value = "${aws_iam_access_key.s3-user.id}"
-}
+resource "aws_s3_bucket_policy" "s3-bucket-policy" {
+  bucket = "${aws_s3_bucket.s3-bucket.id}"
 
-output "secret" {
-  value = "${aws_iam_access_key.s3-user.secret}"
+  policy = <<EOF
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Sid": "Stmt1526330824446",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "${aws_iam_user.s3-user.arn}"
+      },
+      "Action": "s3:*",
+      "Resource": ["${aws_s3_bucket.s3-bucket.arn}/*"]
+    },
+    {
+      "Sid":"AllowRead",
+      "Effect":"Allow",
+      "Principal": "*",
+      "Action":["s3:GetObject"],
+      "Resource":["${aws_s3_bucket.s3-bucket.arn}/*"]
+    }
+  ]
+}
+EOF
 }
