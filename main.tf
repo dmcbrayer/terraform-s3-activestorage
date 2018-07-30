@@ -2,17 +2,40 @@ provider "aws" {
   profile = "${var.aws_profile}"
 }
 
+#########
+#  IAM  #
+#########
+
 resource "aws_iam_user" "s3-user" {
   name = "${var.iam_user_name}"
 }
 
 resource "aws_iam_access_key" "s3-user" {
   user = "${aws_iam_user.s3-user.name}"
-  #
-  # Don't attach a policy to this user because the only
-  # permissions they should have should come from the
-  # bucket policy.
 }
+
+resource "aws_iam_user_policy" "s3-policy" {
+  name = "s3-policy"
+  user = "${aws_iam_user.s3-user.name}"
+  
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1532723878817",
+      "Action": "s3:*",
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+########
+#  S3  #
+########
 
 resource "aws_s3_bucket" "s3-bucket" {
   bucket = "${var.bucket_name}"
