@@ -1,10 +1,16 @@
 output "s3-bucket" {
   value = <<EOF
 
+Production
 ----------------
 Bucket name: ${aws_s3_bucket.s3-bucket.id}
 Bucket domain name: ${aws_s3_bucket.s3-bucket.bucket_domain_name}
+
+Staging
 ----------------
+Bucket name: ${aws_s3_bucket.staging-s3-bucket.id}
+Bucket domain name: ${aws_s3_bucket.staging-s3-bucket.bucket_domain_name}
+
 EOF
 }
 
